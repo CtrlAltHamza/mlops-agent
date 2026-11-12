@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: churn-inference
+  namespace: mlops-inference
+  labels:
+    app: churn-inference
+    app.kubernetes.io/version: "1.0.0-broken"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: churn-inference
+  template:
+    metadata:
+      labels:
+        app: churn-inference
+        app.kubernetes.io/version: "1.0.0-broken"
+    spec:
+      containers:
+        - name: api
+          image: mlops-agent:1.0.0
+          imagePullPolicy: IfNotPresent
+          command: ["python", "-c", "import time; print('prediction process started without binding the API'); time.sleep(3600)"]
+          ports:
+            - name: http
+              containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: churn-inference-config
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            failureThreshold: 2
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
