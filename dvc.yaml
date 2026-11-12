@@ -1,0 +1,42 @@
+stages:
+  validate:
+    cmd: python -m training.train --stage validate
+    deps:
+      - data/raw/customers.csv
+      - data/VERSION
+      - training/train.py
+    outs:
+      - data/interim/validated.csv
+  preprocess:
+    cmd: python -m training.train --stage preprocess
+    deps:
+      - data/interim/validated.csv
+      - training/train.py
+    outs:
+      - data/processed/train.csv
+      - data/processed/test.csv
+  train:
+    cmd: python -m training.train --stage train
+    deps:
+      - data/processed/train.csv
+      - training/train.py
+    outs:
+      - models/model.joblib
+  evaluate:
+    cmd: python -m training.train --stage evaluate
+    deps:
+      - models/model.joblib
+      - data/processed/test.csv
+      - data/raw/customers.csv
+      - data/VERSION
+      - training/train.py
+    metrics:
+      - metrics/evaluation.json:
+          cache: false
+    outs:
+      - metrics/evaluation.json
+  quality_gate:
+    cmd: python -m training.train --stage quality_gate
+    deps:
+      - metrics/evaluation.json
+      - training/train.py
