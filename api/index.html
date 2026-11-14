@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MLOps AI Agent</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #38bdf8;
+      --fact: #4ade80;
+      --warn: #fbbf24;
+      --act: #60a5fa;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    header {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    header .status {
+      font-size: 0.8rem;
+      background: #064e3b;
+      color: #34d399;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: 1000px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 16px;
+      overflow: hidden;
+    }
+    .scenarios {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .scenarios button {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .scenarios button:hover {
+      background: #334155;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    #chat {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 12px;
+      background: rgba(30,41,59,0.5);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .msg {
+      display: flex;
+      flex-direction: column;
+      max-width: 85%;
+      animation: fadeIn 0.2s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .msg.user { align-self: flex-end; }
+    .msg.user .bubble {
+      background: #2563eb;
+      color: white;
+      border-radius: 12px 12px 2px 12px;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+    }
+    .msg.agent { align-self: flex-start; max-width: 95%; }
+    .msg.agent .bubble {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px 12px 12px 2px;
+      padding: 14px;
+      font-size: 0.9rem;
+    }
+    .tools { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    .tool-tag {
+      font-family: monospace;
+      font-size: 0.75rem;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: #0f172a;
+      border: 1px solid #334155;
+    }
+    .tool-tag.ok { border-color: #059669; color: #34d399; }
+    .tool-tag.unavailable { border-color: #b91c1c; color: #f87171; }
+    .tool-tag.confirmation_required { border-color: #d97706; color: #fbbf24; }
+    .section-title {
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 10px 0 4px 0;
+    }
+    .section-title.facts { color: var(--fact); }
+    .section-title.uncertainties { color: var(--warn); }
+    .section-title.actions { color: var(--act); }
+    ul { margin-left: 20px; font-size: 0.88rem; line-height: 1.45; }
+    li { margin-bottom: 4px; }
+    form { display: flex; gap: 8px; margin-top: 12px; }
+    input[type="text"] {
+      flex: 1;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: white;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    input[type="text"]:focus { border-color: var(--primary); }
+    button[type="submit"] {
+      background: #0284c7;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button[type="submit"]:hover { background: #0369a1; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>&#9881; MLOps AI Agent</h1>
+    <div>
+      <span class="status">&bull; DVC &bull; MLflow &bull; Airflow &bull; Kubernetes</span>
+      <a href="/docs" target="_blank" style="color:var(--primary); margin-left:14px; font-size:0.85rem; text-decoration:none;">Swagger API &rarr;</a>
+    </div>
+  </header>
+  <div class="container">
+    <div class="scenarios">
+      <button onclick="sendQ('Which dataset version is recorded, and how do I reproduce it?')">1. Dataset Provenance</button>
+      <button onclick="sendQ('Compare the last five training runs and recommend the best candidate based on F1 score.')">2. Model Selection</button>
+      <button onclick="sendQ('Trigger the model training pipeline and report whether execution succeeded.')">3. Airflow Trigger (Unconfirmed)</button>
+      <button onclick="sendQ('Why is my prediction API unavailable?')">4. Deployment Diagnosis</button>
+      <button onclick="sendQ('Find the best recent model, identify the dataset version used to train it, check the deployment status, and explain whether retraining is necessary.')">5. Multi-Tool Reasoning</button>
+    </div>
+    <div id="chat">
+      <div class="msg agent">
+        <div class="bubble">
+          <strong>Welcome to the MLOps AI Agent.</strong> Ask any operational question about datasets, experiments, pipelines, or cluster workloads, or click one of the preset scenarios above.
+        </div>
+      </div>
+    </div>
+    <form id="askForm" onsubmit="handleSend(event)">
+      <input id="prompt" type="text" placeholder="Ask about dataset, experiments, DAGs, or pods..." autocomplete="off" />
+      <button type="submit">Ask Agent</button>
+    </form>
+  </div>
+  <script>
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('prompt');
+
+    function sendQ(text) {
+      input.value = text;
+      handleSend(new Event('submit'));
+    }
+
+    async function handleSend(e) {
+      e.preventDefault();
+      const query = input.value.trim();
+      if (!query) return;
+      input.value = '';
+
+      const userDiv = document.createElement('div');
+      userDiv.className = 'msg user';
+      userDiv.innerHTML = `<div class="bubble">${escapeHtml(query)}</div>`;
+      chat.appendChild(userDiv);
+      chat.scrollTop = chat.scrollHeight;
+
+      const loadDiv = document.createElement('div');
+      loadDiv.className = 'msg agent';
+      loadDiv.innerHTML = `<div class="bubble" style="color:var(--muted)">Thinking and querying tools...</div>`;
+      chat.appendChild(loadDiv);
+      chat.scrollTop = chat.scrollHeight;
+
+      try {
+        const res = await fetch('/chat', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({message: query})
+        });
+        const data = await res.json();
+        chat.removeChild(loadDiv);
+
+        const agentDiv = document.createElement('div');
+        agentDiv.className = 'msg agent';
+
+        let toolsHtml = '<div class="tools">';
+        (data.tool_results || []).forEach(t => {
+          toolsHtml += `<span class="tool-tag ${t.status}">${t.tool}: ${t.status} (${Math.round(t.elapsed_ms)}ms)</span>`;
+        });
+        toolsHtml += '</div>';
+
+        let factsHtml = data.facts && data.facts.length ?
+          `<div class="section-title facts">&#x2714; Facts</div><ul>` + data.facts.map(f => `<li>${escapeHtml(f)}</li>`).join('') + '</ul>' : '';
+        let uncertHtml = data.uncertainties && data.uncertainties.length ?
+          `<div class="section-title uncertainties">&#x26A0; Uncertainties</div><ul>` + data.uncertainties.map(u => `<li>${escapeHtml(u)}</li>`).join('') + '</ul>' : '';
+        let actsHtml = data.recommended_actions && data.recommended_actions.length ?
+          `<div class="section-title actions">&#x279C; Recommended Actions</div><ul>` + data.recommended_actions.map(a => `<li>${escapeHtml(a)}</li>`).join('') + '</ul>' : '';
+
+        agentDiv.innerHTML = `<div class="bubble">${toolsHtml}${factsHtml}${uncertHtml}${actsHtml}</div>`;
+        chat.appendChild(agentDiv);
+        chat.scrollTop = chat.scrollHeight;
+      } catch (err) {
+        chat.removeChild(loadDiv);
+        const errDiv = document.createElement('div');
+        errDiv.className = 'msg agent';
+        errDiv.innerHTML = `<div class="bubble" style="color:#f87171">Error calling /chat: ${escapeHtml(err.message)}</div>`;
+        chat.appendChild(errDiv);
+      }
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>

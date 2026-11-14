@@ -5,11 +5,13 @@ from __future__ import annotations
 import logging
 import os
 from functools import lru_cache
+from pathlib import Path
 from typing import Any
 
 import joblib
 import pandas as pd
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 
 from agent.envfile import load_dotenv
@@ -66,6 +68,16 @@ def ready() -> dict[str, Any]:
 @app.get("/version")
 def version() -> dict[str, str]:
     return {"app_version": app.version, "model_path": model_path()}
+
+
+HTML_PATH = Path(__file__).parent / "index.html"
+
+
+@app.get("/", response_class=HTMLResponse)
+def ui() -> str:
+    if HTML_PATH.exists():
+        return HTML_PATH.read_text(encoding="utf-8")
+    return "<h1>MLOps AI Agent</h1><p><a href='/docs'>Swagger API</a></p>"
 
 
 @app.post("/predict", response_model=PredictResponse)

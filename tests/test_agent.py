@@ -186,3 +186,14 @@ def test_logs_scrub_secrets(caplog, monkeypatch) -> None:
     assert result.status == "unavailable"
     assert "super-secret-pass" not in caplog.text
     assert "duration_ms" in caplog.text
+
+
+def test_ui_endpoint_returns_html() -> None:
+    from fastapi.testclient import TestClient
+
+    from api.main import app
+
+    client = TestClient(app)
+    response = client.get("/")
+    assert response.status_code == 200
+    assert "MLOps AI Agent" in response.text
