@@ -1,0 +1,283 @@
+[
+  {
+    "request_id": "07d13253c504",
+    "answer": "The statements below are limited to tool responses collected for this request. A leading metric is not treated as production readiness.\n\nFacts:\n- Tracked dataset paths: ['data/raw/customers.csv', 'data/VERSION', 'data/interim/validated.csv', 'data/processed/train.csv', 'data/processed/test.csv', 'data/raw/customers.csv', 'data/VERSION']\n- To reproduce fde759e441b1bf6e007da25e80b0de789ef85b50: ['git checkout fde759e441b1bf6e007da25e80b0de789ef85b50', 'dvc checkout', 'dvc repro']. Those commands were not executed.\n- Workspace dataset data\\raw\\customers.csv label v1.0 md5 4d1c87ee69851366d5c6801d0ddb62ab git fde759e441b1bf6e007da25e80b0de789ef85b50.\n\nUncertainties:\n- None.\n\nRecommended actions:\n- Retraining was not started. No failed quality gate, failed training run, freshness policy, or supplied degradation result is present in the tool evidence.",
+    "facts": [
+      "Tracked dataset paths: ['data/raw/customers.csv', 'data/VERSION', 'data/interim/validated.csv', 'data/processed/train.csv', 'data/processed/test.csv', 'data/raw/customers.csv', 'data/VERSION']",
+      "To reproduce fde759e441b1bf6e007da25e80b0de789ef85b50: ['git checkout fde759e441b1bf6e007da25e80b0de789ef85b50', 'dvc checkout', 'dvc repro']. Those commands were not executed.",
+      "Workspace dataset data\\raw\\customers.csv label v1.0 md5 4d1c87ee69851366d5c6801d0ddb62ab git fde759e441b1bf6e007da25e80b0de789ef85b50."
+    ],
+    "uncertainties": [],
+    "recommended_actions": [
+      "Retraining was not started. No failed quality gate, failed training run, freshness policy, or supplied degradation result is present in the tool evidence."
+    ],
+    "tool_results": [
+      {
+        "ok": true,
+        "tool": "list_datasets",
+        "data": {
+          "datasets": [
+            {
+              "stage": "validate",
+              "path": "data/raw/customers.csv",
+              "source": "dvc.yaml"
+            },
+            {
+              "stage": "validate",
+              "path": "data/VERSION",
+              "source": "dvc.yaml"
+            },
+            {
+              "stage": "preprocess",
+              "path": "data/interim/validated.csv",
+              "source": "dvc.yaml"
+            },
+            {
+              "stage": "train",
+              "path": "data/processed/train.csv",
+              "source": "dvc.yaml"
+            },
+            {
+              "stage": "evaluate",
+              "path": "data/processed/test.csv",
+              "source": "dvc.yaml"
+            },
+            {
+              "stage": "evaluate",
+              "path": "data/raw/customers.csv",
+              "source": "dvc.yaml"
+            },
+            {
+              "stage": "evaluate",
+              "path": "data/VERSION",
+              "source": "dvc.yaml"
+            }
+          ]
+        },
+        "error": null,
+        "elapsed_ms": 11.072099999864804,
+        "status": "ok"
+      },
+      {
+        "ok": true,
+        "tool": "explain_reproduction",
+        "data": {
+          "git_commit": "fde759e441b1bf6e007da25e80b0de789ef85b50",
+          "version_label": "v1.0",
+          "commands": [
+            "git checkout fde759e441b1bf6e007da25e80b0de789ef85b50",
+            "dvc checkout",
+            "dvc repro"
+          ],
+          "commands_executed": false,
+          "note": "Reproduction commands are described only. Nothing was checked out."
+        },
+        "error": null,
+        "elapsed_ms": 70.74970000007852,
+        "status": "ok"
+      },
+      {
+        "ok": true,
+        "tool": "get_dataset_version",
+        "data": {
+          "path": "data\\raw\\customers.csv",
+          "version_label": "v1.0",
+          "md5": "4d1c87ee69851366d5c6801d0ddb62ab",
+          "git_commit": "fde759e441b1bf6e007da25e80b0de789ef85b50",
+          "dvc_pipeline": true,
+          "reproduce": [
+            "git checkout fde759e441b1bf6e007da25e80b0de789ef85b50",
+            "dvc checkout",
+            "dvc repro"
+          ],
+          "commands_executed": false
+        },
+        "error": null,
+        "elapsed_ms": 75.31229999995048,
+        "status": "ok"
+      }
+    ],
+    "retraining_started": false
+  },
+  {
+    "request_id": "353ac50122da",
+    "answer": "The statements below are limited to tool responses collected for this request. A leading metric is not treated as production readiness.\n\nFacts:\n- Comparison lists recorded metrics only. It does not promote a model.\n- The metric leader is the highest value of the requested metric among the recent runs. A high score does not make a model production-ready. Promotion also requires quality_gate_passed=true, a healthy deployment, and an explicit decision.\n- No recent run recorded f1_score. There is no metric leader.\n\nUncertainties:\n- None.\n\nRecommended actions:\n- Retraining was not started. No failed quality gate, failed training run, freshness policy, or supplied degradation result is present in the tool evidence.",
+    "facts": [
+      "Comparison lists recorded metrics only. It does not promote a model.",
+      "The metric leader is the highest value of the requested metric among the recent runs. A high score does not make a model production-ready. Promotion also requires quality_gate_passed=true, a healthy deployment, and an explicit decision.",
+      "No recent run recorded f1_score. There is no metric leader."
+    ],
+    "uncertainties": [],
+    "recommended_actions": [
+      "Retraining was not started. No failed quality gate, failed training run, freshness policy, or supplied degradation result is present in the tool evidence."
+    ],
+    "tool_results": [
+      {
+        "ok": true,
+        "tool": "compare_runs",
+        "data": {
+          "runs": [],
+          "note": "Comparison lists recorded metrics only. It does not promote a model."
+        },
+        "error": null,
+        "elapsed_ms": 46.79329999999027,
+        "status": "ok"
+      },
+      {
+        "ok": true,
+        "tool": "find_best_run",
+        "data": {
+          "metric": "f1_score",
+          "recent_runs": [],
+          "metric_leader": null,
+          "promotion_candidate": null,
+          "production_ready": false,
+          "selection_rule": "The metric leader is the highest value of the requested metric among the recent runs. A high score does not make a model production-ready. Promotion also requires quality_gate_passed=true, a healthy deployment, and an explicit decision."
+        },
+        "error": null,
+        "elapsed_ms": 4.521500000009837,
+        "status": "ok"
+      }
+    ],
+    "retraining_started": false
+  },
+  {
+    "request_id": "9647e6ef38c8",
+    "answer": "No operational claim can be made. The tools for this request did not return evidence, so no dataset version, metric, pipeline state, or cluster state is inferred.\n\nFacts:\n- None.\n\nUncertainties:\n- list_dags returned unavailable: Airflow authentication failed: ConnectError\n- get_dag_runs returned unavailable: Airflow authentication failed: ConnectError\n- trigger_training_dag returned confirmation_required: confirmation_required to trigger a DAG\n\nRecommended actions:\n- Repeat the request and include the word confirm before trigger_training_dag will run.\n- Retraining was not started. No failed quality gate, failed training run, freshness policy, or supplied degradation result is present in the tool evidence.",
+    "facts": [],
+    "uncertainties": [
+      "list_dags returned unavailable: Airflow authentication failed: ConnectError",
+      "get_dag_runs returned unavailable: Airflow authentication failed: ConnectError",
+      "trigger_training_dag returned confirmation_required: confirmation_required to trigger a DAG"
+    ],
+    "recommended_actions": [
+      "Repeat the request and include the word confirm before trigger_training_dag will run.",
+      "Retraining was not started. No failed quality gate, failed training run, freshness policy, or supplied degradation result is present in the tool evidence."
+    ],
+    "tool_results": [
+      {
+        "ok": false,
+        "tool": "list_dags",
+        "data": null,
+        "error": "Airflow authentication failed: ConnectError",
+        "elapsed_ms": 2891.3775999999416,
+        "status": "unavailable"
+      },
+      {
+        "ok": false,
+        "tool": "get_dag_runs",
+        "data": null,
+        "error": "Airflow authentication failed: ConnectError",
+        "elapsed_ms": 2615.554100000054,
+        "status": "unavailable"
+      },
+      {
+        "ok": false,
+        "tool": "trigger_training_dag",
+        "data": null,
+        "error": "confirmation_required to trigger a DAG",
+        "elapsed_ms": 1.8671000000267668,
+        "status": "confirmation_required"
+      }
+    ],
+    "retraining_started": false
+  },
+  {
+    "request_id": "ebf3af27c9f2",
+    "answer": "No operational claim can be made. The tools for this request did not return evidence, so no dataset version, metric, pipeline state, or cluster state is inferred.\n\nFacts:\n- None.\n\nUncertainties:\n- diagnose_application returned unavailable: kubeconfig is unavailable: Invalid kube-config file. No configuration found.\n- get_deployed_version returned unavailable: kubeconfig is unavailable: Invalid kube-config file. No configuration found.\n- list_services returned unavailable: kubeconfig is unavailable: Invalid kube-config file. No configuration found.\n\nRecommended actions:\n- Retraining was not started. No failed quality gate, failed training run, freshness policy, or supplied degradation result is present in the tool evidence.",
+    "facts": [],
+    "uncertainties": [
+      "diagnose_application returned unavailable: kubeconfig is unavailable: Invalid kube-config file. No configuration found.",
+      "get_deployed_version returned unavailable: kubeconfig is unavailable: Invalid kube-config file. No configuration found.",
+      "list_services returned unavailable: kubeconfig is unavailable: Invalid kube-config file. No configuration found."
+    ],
+    "recommended_actions": [
+      "Retraining was not started. No failed quality gate, failed training run, freshness policy, or supplied degradation result is present in the tool evidence."
+    ],
+    "tool_results": [
+      {
+        "ok": false,
+        "tool": "diagnose_application",
+        "data": null,
+        "error": "kubeconfig is unavailable: Invalid kube-config file. No configuration found.",
+        "elapsed_ms": 937.9410999999891,
+        "status": "unavailable"
+      },
+      {
+        "ok": false,
+        "tool": "get_deployed_version",
+        "data": null,
+        "error": "kubeconfig is unavailable: Invalid kube-config file. No configuration found.",
+        "elapsed_ms": 1.2618000000657048,
+        "status": "unavailable"
+      },
+      {
+        "ok": false,
+        "tool": "list_services",
+        "data": null,
+        "error": "kubeconfig is unavailable: Invalid kube-config file. No configuration found.",
+        "elapsed_ms": 1.294599999937418,
+        "status": "unavailable"
+      }
+    ],
+    "retraining_started": false
+  },
+  {
+    "request_id": "a3c13618f4c3",
+    "answer": "The statements below are limited to tool responses collected for this request. A leading metric is not treated as production readiness.\n\nFacts:\n- The metric leader is the highest value of the requested metric among the recent runs. A high score does not make a model production-ready. Promotion also requires quality_gate_passed=true, a healthy deployment, and an explicit decision.\n- No recent run recorded f1_score. There is no metric leader.\n\nUncertainties:\n- get_dataset_version returned unavailable: no recorded dataset reference was returned by MLflow\n- diagnose_application returned unavailable: kubeconfig is unavailable: Invalid kube-config file. No configuration found.\n- get_dag_runs returned unavailable: Airflow authentication failed: ConnectError\n\nRecommended actions:\n- Retraining was not started. No failed quality gate, failed training run, freshness policy, or supplied degradation result is present in the tool evidence.",
+    "facts": [
+      "The metric leader is the highest value of the requested metric among the recent runs. A high score does not make a model production-ready. Promotion also requires quality_gate_passed=true, a healthy deployment, and an explicit decision.",
+      "No recent run recorded f1_score. There is no metric leader."
+    ],
+    "uncertainties": [
+      "get_dataset_version returned unavailable: no recorded dataset reference was returned by MLflow",
+      "diagnose_application returned unavailable: kubeconfig is unavailable: Invalid kube-config file. No configuration found.",
+      "get_dag_runs returned unavailable: Airflow authentication failed: ConnectError"
+    ],
+    "recommended_actions": [
+      "Retraining was not started. No failed quality gate, failed training run, freshness policy, or supplied degradation result is present in the tool evidence."
+    ],
+    "tool_results": [
+      {
+        "ok": true,
+        "tool": "find_best_run",
+        "data": {
+          "metric": "f1_score",
+          "recent_runs": [],
+          "metric_leader": null,
+          "promotion_candidate": null,
+          "production_ready": false,
+          "selection_rule": "The metric leader is the highest value of the requested metric among the recent runs. A high score does not make a model production-ready. Promotion also requires quality_gate_passed=true, a healthy deployment, and an explicit decision."
+        },
+        "error": null,
+        "elapsed_ms": 5.272099999956481,
+        "status": "ok"
+      },
+      {
+        "ok": false,
+        "tool": "get_dataset_version",
+        "data": null,
+        "error": "no recorded dataset reference was returned by MLflow",
+        "elapsed_ms": 0.0,
+        "status": "unavailable"
+      },
+      {
+        "ok": false,
+        "tool": "diagnose_application",
+        "data": null,
+        "error": "kubeconfig is unavailable: Invalid kube-config file. No configuration found.",
+        "elapsed_ms": 1.1045999999623746,
+        "status": "unavailable"
+      },
+      {
+        "ok": false,
+        "tool": "get_dag_runs",
+        "data": null,
+        "error": "Airflow authentication failed: ConnectError",
+        "elapsed_ms": 2637.8440999999384,
+        "status": "unavailable"
+      }
+    ],
+    "retraining_started": false
+  }
+]

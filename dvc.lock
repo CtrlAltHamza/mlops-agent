@@ -1,0 +1,97 @@
+schema: '2.0'
+stages:
+  validate:
+    cmd: python -m training.train --stage validate
+    deps:
+    - path: data/VERSION
+      hash: md5
+      md5: 1db1e69886f24788f21f276bf35c9d59
+      size: 6
+    - path: data/raw/customers.csv
+      hash: md5
+      md5: 4d1c87ee69851366d5c6801d0ddb62ab
+      size: 2346
+    - path: training/train.py
+      hash: md5
+      md5: feae6336e9488095342cc7ed7cf31bc1
+      size: 8943
+    outs:
+    - path: data/interim/validated.csv
+      hash: md5
+      md5: 4d1c87ee69851366d5c6801d0ddb62ab
+      size: 2346
+  preprocess:
+    cmd: python -m training.train --stage preprocess
+    deps:
+    - path: data/interim/validated.csv
+      hash: md5
+      md5: 4d1c87ee69851366d5c6801d0ddb62ab
+      size: 2346
+    - path: training/train.py
+      hash: md5
+      md5: feae6336e9488095342cc7ed7cf31bc1
+      size: 8943
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 2e9041ec68785f992c83cb6bcb3a627a
+      size: 647
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 14cca021918433000f1cd9e00dd576fa
+      size: 1780
+  train:
+    cmd: python -m training.train --stage train
+    deps:
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 14cca021918433000f1cd9e00dd576fa
+      size: 1780
+    - path: training/train.py
+      hash: md5
+      md5: feae6336e9488095342cc7ed7cf31bc1
+      size: 8943
+    outs:
+    - path: models/model.joblib
+      hash: md5
+      md5: a108c526fb7024f53294170f9eaaa8d7
+      size: 1231
+  evaluate:
+    cmd: python -m training.train --stage evaluate
+    deps:
+    - path: data/VERSION
+      hash: md5
+      md5: 1db1e69886f24788f21f276bf35c9d59
+      size: 6
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 2e9041ec68785f992c83cb6bcb3a627a
+      size: 647
+    - path: data/raw/customers.csv
+      hash: md5
+      md5: 4d1c87ee69851366d5c6801d0ddb62ab
+      size: 2346
+    - path: models/model.joblib
+      hash: md5
+      md5: a108c526fb7024f53294170f9eaaa8d7
+      size: 1231
+    - path: training/train.py
+      hash: md5
+      md5: feae6336e9488095342cc7ed7cf31bc1
+      size: 8943
+    outs:
+    - path: metrics/evaluation.json
+      hash: md5
+      md5: 3a87dd67316039b1224f807446c030cf
+      size: 280
+  quality_gate:
+    cmd: python -m training.train --stage quality_gate
+    deps:
+    - path: metrics/evaluation.json
+      hash: md5
+      md5: 3a87dd67316039b1224f807446c030cf
+      size: 280
+    - path: training/train.py
+      hash: md5
+      md5: feae6336e9488095342cc7ed7cf31bc1
+      size: 8943
