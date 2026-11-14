@@ -8,6 +8,7 @@ from functools import lru_cache
 from typing import Any
 
 import joblib
+import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
@@ -72,7 +73,7 @@ def predict(body: PredictRequest) -> PredictResponse:
     model = load_model()
     if model is None:
         raise HTTPException(status_code=503, detail="model is not loaded")
-    row = [[getattr(body, name) for name in FEATURES]]
+    row = pd.DataFrame([[getattr(body, name) for name in FEATURES]], columns=FEATURES)
     prediction = int(model.predict(row)[0])
     return PredictResponse(churn=prediction, app_version=app.version)
 
