@@ -18,6 +18,7 @@ data/processed/
 .dvc/cache/
 .dvc/tmp/
 .dvc/config.local
+mlops-dvc-remote/
 *.log
 .idea/
 .vscode/
